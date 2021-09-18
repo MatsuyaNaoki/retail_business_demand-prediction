@@ -2,10 +2,10 @@ from sklearn.model_selection import cross_validate
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import make_scorer
 import numpy as np
-
-import model_lightgbm
 import optuna
 
+import model_lightgbm
+import model_randomforest
 import global_valiables
 
 _modeler = None
@@ -19,6 +19,8 @@ def setup(modeltype, X_train, y_train, X_test):
 
     if modeltype=='lightgbm':
         _modeler = model_lightgbm.LGBM()
+    elif modeltype=='randomforest':
+        _modeler = model_randomforest.RandomForest()
     else:
         raise Exception('modeltype: {} is not defined'.format(modeltype))
     
@@ -45,7 +47,7 @@ def objective(trial):
     score_funcs = {
         'rmse': make_scorer(score_rmse)
     }
-    scores = cross_validate(_modeler._model, _X_train, _y_train, cv=5, scoring=score_funcs)
+    scores = cross_validate(_modeler._model, _X_train, _y_train, cv=10, scoring=score_funcs)
 
     return scores['test_rmse'].mean()
 
@@ -56,8 +58,11 @@ def experiment(n_trials):
     if n_trials==0:
         _modeler.create()
     else:
-        study = optuna.create_study()
+        study = optuna.create_study(sampler=optuna.samplers.RandomSampler(seed=123))
         study.optimize(objective, n_trials=n_trials)
+        print('\noptuna.best_score: ', study.best_value)
+    
+    print('\nmodel: ',_modeler._model)
     _modeler.fit(_X_train, _y_train)
 
 

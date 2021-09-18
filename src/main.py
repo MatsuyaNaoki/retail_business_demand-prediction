@@ -47,7 +47,7 @@ def main(arguments):
         df_result = X_test.copy()
         df_result.insert(0, 'pred_売上個数', pred)
         df_result.to_csv(out_dir+'result.csv', encoding='shift-jis')
-        df_result['pred_売上個数'].to_csv(out_dir+'result_for_submit.csv')
+        df_result['pred_売上個数'].to_csv(out_dir+'result_for_submit.csv', header=None)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

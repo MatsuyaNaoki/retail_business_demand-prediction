@@ -50,14 +50,14 @@ def objective(trial):
     return scores['test_rmse'].mean()
 
 
-def experiment(n_trials=0):
+def experiment(n_trials):
     global _modeler, _last_params, _X_train, _y_train, _X_test
 
     if n_trials==0:
         _modeler.create()
     else:
         study = optuna.create_study()
-        study.optimize(objective, n_trials=10)
+        study.optimize(objective, n_trials=n_trials)
     _modeler.fit(_X_train, _y_train)
 
 

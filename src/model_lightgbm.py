@@ -5,7 +5,7 @@ default_params = {
 }
 
 search_params = {
-    'boosting_type': ['gbdt', 'dart', 'goss', 'rf'],
+    'boosting_type': ['gbdt', 'dart', 'goss'],
     'learning_rate': {'min': 0.0001, 'max': 0.5},
     'num_leaves': {'min': 10, 'max':100},
     'n_estimators': {'min': 5, 'max': 500}

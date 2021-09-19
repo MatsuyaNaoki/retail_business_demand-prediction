@@ -69,9 +69,11 @@ def experiment(n_trials):
 def predict():
     global _modeler, _last_params, _X_train, _y_train, _X_test
 
-    train_score = np.sqrt(mean_squared_error(_y_train, _modeler.predict(_X_train)))
+    pred_test = _modeler.predict(_X_test)
+    pred_train = _modeler.predict(_X_train)
+    train_score = np.sqrt(mean_squared_error(_y_train, pred_train))
     print('train RMSE: {}'. format(train_score))
 
-    return _modeler.predict(_X_test)
+    return pred_test, pred_train
 
     

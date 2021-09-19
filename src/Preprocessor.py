@@ -90,7 +90,7 @@ class Preprocessor:
             df_lag = df_concat[['店舗ID', '商品ID', '売上個数', 'month_block']]
             df_lag.loc[:,'month_block'] = df_lag.loc[:,'month_block']+lag
             df_lag = df_lag.rename(columns={'売上個数': '売上個数_def_'+str(lag)+'month'})
-            df_feat = df_feat.merge(df_lag, on=['month_block', '店舗ID', '商品ID'])
+            df_feat = df_feat.merge(df_lag, on=['month_block', '店舗ID', '商品ID'], how='left')
         df_feat.drop('month_block', axis=1, inplace=True)
         
         test = df_feat[(df_feat['year']==purposeYear) & (df_feat['month']==purposeMonth)]

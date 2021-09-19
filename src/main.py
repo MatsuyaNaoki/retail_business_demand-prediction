@@ -41,12 +41,15 @@ def main(arguments):
     X_train, y_train, X_test = prep.createData(beginDate, endDate, purposeDate)
     modeler.setup(modeltype, X_train, y_train, X_test)
     modeler.experiment(n_trials)
-    pred = modeler.predict()
+    pred, pred_train = modeler.predict()
 
     if global_valiables.save:
         df_result = X_test.copy()
+        df_result_train = X_train.copy()
         df_result.insert(0, 'pred_売上個数', pred)
+        df_result_train.insert(0, 'pred_売上個数', pred_train)
         df_result.to_csv(out_dir+'result.csv', encoding='shift-jis')
+        df_result.to_csv(out_dir+'result_train.csv', encoding='shift-jis')
         df_result['pred_売上個数'].reset_index(drop=True).to_csv(out_dir+'result_for_submit.csv', header=None)
 
 if __name__ == '__main__':

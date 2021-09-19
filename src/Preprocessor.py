@@ -84,7 +84,7 @@ class Preprocessor:
         # 特徴量エンジニアリング
         
         ## ラグ特徴量追加
-        lags = [2,3,4,5,6,12]
+        lags = [12]
         df_feat = df_concat.copy()
         for lag in lags:
             df_lag = df_concat[['店舗ID', '商品ID', '売上個数', 'month_block']]
@@ -92,6 +92,9 @@ class Preprocessor:
             df_lag = df_lag.rename(columns={'売上個数': '売上個数_def_'+str(lag)+'month'})
             df_feat = df_feat.merge(df_lag, on=['month_block', '店舗ID', '商品ID'], how='left')
         df_feat.drop('month_block', axis=1, inplace=True)
+
+        ## カテゴリID追加
+        df_feat = df_feat.merge(self._df_org_item_categories, on='商品ID', how='left')
         
         test = df_feat[(df_feat['year']==purposeYear) & (df_feat['month']==purposeMonth)]
         train = df_feat[~((df_feat['year']==purposeYear) & (df_feat['month']==purposeMonth))]
